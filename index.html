@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegalSync — Case Management & AI Legal Drafting</title>
+    <!-- Google Fonts: Fraunces (Serif), Inter (Sans-Serif), IBM Plex Mono (Monospace) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ================== AUTH CONTAINER ================== -->
+    <div id="auth-container" class="auth-wrapper">
+        <div class="auth-form-side">
+            <div class="auth-form-container">
+                <div class="auth-header">
+                    <div class="seal-mark">
+                        <svg viewBox="0 0 100 100" width="34" height="34">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="var(--gold-500)" stroke-width="2"/>
+                            <circle cx="50" cy="50" r="38" fill="none" stroke="var(--gold-500)" stroke-width="1" stroke-dasharray="3 3"/>
+                            <text x="50" y="55" font-family="'Fraunces', serif" font-size="22" font-weight="700" fill="var(--gold-500)" text-anchor="middle">LS</text>
+                        </svg>
+                    </div>
+                    <span class="auth-brand">LegalSync</span>
+                </div>
+
+                <!-- Sign In Form -->
+                <form id="login-form" class="auth-form active">
+                    <h2>Welcome Back</h2>
+                    <p class="auth-subtitle">Sign in to manage your cases and drafts</p>
+                    
+                    <div class="form-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" required placeholder="advocate@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required placeholder="••••••••">
+                    </div>
+                    
+                    <button type="submit" class="btn-gold w-100">Sign In</button>
+                    
+                    <p class="auth-footer">
+                        Don't have an account? <a href="#" id="go-to-register">Register chambers</a>
+                    </p>
+                </form>
+
+                <!-- Register Form -->
+                <form id="register-form" class="auth-form">
+                    <h2>Chambers Registration</h2>
+                    <p class="auth-subtitle">Create your individual advocate account</p>
+                    
+                    <div class="form-group">
+                        <label for="reg-name">Full Name</label>
+                        <input type="text" id="reg-name" required placeholder="e.g. Adv. Rajesh Sharma">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-email">Email Address</label>
+                        <input type="email" id="reg-email" required placeholder="rajesh@sharmachambers.in">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-phone">Phone Number</label>
+                        <input type="tel" id="reg-phone" placeholder="+91 98765 43210">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reg-password">Password</label>
+                        <input type="password" id="reg-password" required placeholder="••••••••">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-confirm-password">Confirm Password</label>
+                        <input type="password" id="reg-confirm-password" required placeholder="••••••••">
+                    </div>
+                    
+                    <button type="submit" class="btn-gold w-100">Create Account</button>
+                    
+                    <p class="auth-footer">
+                        Already registered? <a href="#" id="go-to-login">Sign in</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+        <div class="auth-illustration-side">
+            <div class="illustration-content">
+                <div class="seal-large">
+                    <svg viewBox="0 0 200 200" width="120" height="120">
+                        <circle cx="100" cy="100" r="90" fill="none" stroke="var(--gold-300)" stroke-width="3"/>
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="var(--gold-300)" stroke-width="1.5" stroke-dasharray="6 4"/>
+                        <path d="M 60,100 L 140,100 M 100,60 L 100,140" stroke="var(--gold-300)" stroke-width="1" opacity="0.3"/>
+                        <text x="100" y="110" font-family="'Fraunces', serif" font-size="44" font-weight="600" fill="var(--gold-300)" text-anchor="middle">LS</text>
+                    </svg>
+                </div>
+                <h1>LegalSync</h1>
+                <p>Every case, precisely kept.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================== APP SHELL CONTAINER ================== -->
+    <div id="app-container" class="app-layout" style="display: none;">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="app-sidebar">
+            <div class="sidebar-header">
+                <div class="seal-mark">
+                    <svg viewBox="0 0 100 100" width="34" height="34">
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="var(--gold-300)" stroke-width="2"/>
+                        <circle cx="50" cy="50" r="38" fill="none" stroke="var(--gold-300)" stroke-width="1" stroke-dasharray="3 3"/>
+                        <text x="50" y="55" font-family="'Fraunces', serif" font-size="22" fill="var(--gold-300)" text-anchor="middle">LS</text>
+                    </svg>
+                </div>
+                <span class="sidebar-brand">LegalSync</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-target="panel-dashboard">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-target="panel-clients">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <span>Clients</span>
+                </a>
+                <a href="#" class="nav-item" data-target="panel-cases">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><path d="M12 11v6M9 14h6"/></svg>
+                    <span>Cases</span>
+                </a>
+                <a href="#" class="nav-item" data-target="panel-drafts">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    <span>AI Draft Generator</span>
+                </a>
+                <a href="#" class="nav-item" data-target="panel-documents">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    <span>Saved Drafts</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button id="btn-logout" class="nav-item btn-logout-action">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4 M16 17l5-5-5-5 M21 12H9"/></svg>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="app-main">
+            <!-- App Header -->
+            <header class="main-header">
+                <h1 id="page-title">Dashboard</h1>
+                <div class="user-profile">
+                    <span id="user-display-name" class="user-name">Advocate</span>
+                    <div class="avatar" id="user-avatar">A</div>
+                </div>
+            </header>
+
+            <!-- ================== PANEL: DASHBOARD ================== -->
+            <section id="panel-dashboard" class="content-panel active">
+                <!-- Stat cards -->
+                <div class="stats-grid">
+                    <div class="card stat-card">
+                        <div class="stat-icon clients-color">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Active Clients</span>
+                            <span class="stat-value" id="stat-clients">0</span>
+                        </div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-icon cases-color">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Total Cases</span>
+                            <span class="stat-value" id="stat-cases">0</span>
+                        </div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-icon hearings-color">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Upcoming Hearings</span>
+                            <span class="stat-value" id="stat-hearings">0</span>
+                        </div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-icon drafts-color">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Generated Drafts</span>
+                            <span class="stat-value" id="stat-drafts">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Content split -->
+                <div class="dashboard-split-row">
+                    <!-- Upcoming hearings -->
+                    <div class="card split-card-large">
+                        <div class="card-header">
+                            <h3>Next Hearing Calendar</h3>
+                        </div>
+                        <div class="card-body scroll-y">
+                            <table class="data-table" id="dashboard-hearings-table">
+                                <thead>
+                                    <tr>
+                                        <th>Case Number</th>
+                                        <th>Client Name</th>
+                                        <th>Court</th>
+                                        <th>Hearing Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="4" class="text-muted text-center py-4">No upcoming hearings scheduled.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Activity -->
+                    <div class="card split-card-small">
+                        <div class="card-header">
+                            <h3>Chambers Feed</h3>
+                        </div>
+                        <div class="card-body scroll-y">
+                            <div class="activity-feed" id="dashboard-activity-feed">
+                                <div class="activity-item empty">
+                                    <p class="text-muted">No recent activity recorded.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick actions -->
+                <div class="quick-actions-row">
+                    <h4>Quick Actions</h4>
+                    <div class="quick-actions-grid">
+                        <button class="quick-action-card" id="qa-add-client">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>
+                            <span>Add New Client</span>
+                        </button>
+                        <button class="quick-action-card" id="qa-add-case">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+                            <span>Add New Case</span>
+                        </button>
+                        <button class="quick-action-card" id="qa-draft-doc">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+                            <span>Draft Legal Document</span>
+                        </button>
+                        <button class="quick-action-card" id="qa-check-reminders">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                            <span>Hearing Reminders</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================== PANEL: CLIENTS ================== -->
+            <section id="panel-clients" class="content-panel">
+                <div class="action-header">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="search-clients" placeholder="Search clients by name, email...">
+                    </div>
+                    <button class="btn-gold" id="btn-add-client-modal">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Add Client
+                    </button>
+                </div>
+                <div class="card table-card">
+                    <table class="data-table" id="clients-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Address</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="text-muted text-center py-5">No client records found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ================== PANEL: CASES ================== -->
+            <section id="panel-cases" class="content-panel">
+                <div class="action-header">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="search-cases" placeholder="Search by case number, court, type...">
+                    </div>
+                    <div class="filter-group">
+                        <select id="filter-case-status">
+                            <option value="">All Statuses</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Ongoing">Ongoing</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                    </div>
+                    <button class="btn-gold" id="btn-add-case-modal">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Add Case
+                    </button>
+                </div>
+                <div class="card table-card">
+                    <table class="data-table" id="cases-table">
+                        <thead>
+                            <tr>
+                                <th>Case Number</th>
+                                <th>Client Name</th>
+                                <th>Court Name</th>
+                                <th>Case Type</th>
+                                <th>Status</th>
+                                <th>Next Hearing</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="7" class="text-muted text-center py-5">No case records found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ================== PANEL: DRAFTS ================== -->
+            <section id="panel-drafts" class="content-panel">
+                <div class="split-pane-layout">
+                    <!-- Left Pane: Input Form -->
+                    <div class="card input-pane">
+                        <div class="pane-header">
+                            <span class="eyebrow">AUTOMATED DRAFTING</span>
+                            <h2>Draft Parameters</h2>
+                        </div>
+                        <form id="draft-generator-form" class="pane-form">
+                            <div class="form-group">
+                                <label for="draft-doc-type">Document Type</label>
+                                <select id="draft-doc-type" required>
+                                    <option value="" disabled selected>Select Document Type</option>
+                                    <option value="Legal Notice">Legal Notice</option>
+                                    <option value="Bail Application">Bail Application</option>
+                                    <option value="Affidavit">Affidavit</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="draft-case-id">Link to Case (Optional)</label>
+                                <select id="draft-case-id">
+                                    <option value="">Unlinked Document</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group flex-fill-textarea">
+                                <label for="draft-facts">Plain Language Case Facts</label>
+                                <textarea id="draft-facts" required placeholder="Describe the dispute or application facts in plain language... (e.g. 'Tenant Rajesh Kumar has not paid monthly rent of Rs. 25,000 for the last 6 months for the property at Flat 302, Green Avenue, Mumbai, despite multiple verbal warnings...')"></textarea>
+                            </div>
+                            
+                            <button type="submit" id="btn-generate-draft" class="btn-gold w-100">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                                Generate Document
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Right Pane: Document Preview -->
+                    <div class="card output-pane">
+                        <div class="pane-header output-header-row">
+                            <div>
+                                <span class="eyebrow">PREVIEW & ACTIONS</span>
+                                <h2>Generated Draft</h2>
+                            </div>
+                            <div class="output-actions" id="output-actions-group" style="display: none;">
+                                <button class="btn-ghost btn-sm" id="btn-copy-draft">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                    Copy
+                                </button>
+                                <button class="btn-ghost btn-sm" id="btn-download-draft">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                    Download (.txt)
+                                </button>
+                                <button class="btn-ghost btn-sm" id="btn-regenerate-draft">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                                    Regenerate
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="draft-display-container">
+                            <!-- Empty state / Initial -->
+                            <div class="draft-empty-state" id="draft-placeholder">
+                                <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="var(--gray-500)" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                <p>Fill in the parameters and click "Generate Document" to create the legal draft.</p>
+                            </div>
+
+                            <!-- Loading indicator -->
+                            <div class="draft-loading-state" id="draft-loader" style="display: none;">
+                                <div class="spinner"></div>
+                                <p>Calling Claude API and drafting document...</p>
+                                <span class="wait-label">(Usually takes 5–15 seconds)</span>
+                            </div>
+
+                            <!-- Real Document -->
+                            <div class="draft-paper" id="draft-paper" style="display: none;">
+                                <pre id="draft-text-content"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================== PANEL: DOCUMENTS (SAVED DRAFTS) ================== -->
+            <section id="panel-documents" class="content-panel">
+                <div class="action-header">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="search-documents" placeholder="Search drafts by type, case, facts...">
+                    </div>
+                    <div class="filter-group">
+                        <select id="filter-doc-type">
+                            <option value="">All Document Types</option>
+                            <option value="Legal Notice">Legal Notice</option>
+                            <option value="Bail Application">Bail Application</option>
+                            <option value="Affidavit">Affidavit</option>
+                        </select>
+                    </div>
+                    <button class="btn-gold" id="btn-quick-new-draft">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        New AI Draft
+                    </button>
+                </div>
+                <div class="card table-card">
+                    <table class="data-table" id="documents-table">
+                        <thead>
+                            <tr>
+                                <th>Doc Type</th>
+                                <th>Linked Case</th>
+                                <th>Date Created</th>
+                                <th>Facts Overview</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="text-muted text-center py-5">No saved draft records found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+
+    <!-- ================== MODAL: ADD CLIENT ================== -->
+    <div id="modal-client" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modal-client-title">Add Client Record</h3>
+                <button class="btn-close-modal" id="btn-close-client-modal">&times;</button>
+            </div>
+            <form id="modal-client-form">
+                <input type="hidden" id="modal-client-id">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="client-name">Client Name *</label>
+                        <input type="text" id="client-name" required placeholder="e.g. Ramesh Kumar">
+                    </div>
+                    <div class="form-group">
+                        <label for="client-phone">Phone Number</label>
+                        <input type="tel" id="client-phone" placeholder="e.g. +91 98765 01234">
+                    </div>
+                    <div class="form-group">
+                        <label for="client-email">Email Address</label>
+                        <input type="email" id="client-email" placeholder="e.g. ramesh@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="client-address">Mailing Address</label>
+                        <textarea id="client-address" rows="3" placeholder="e.g. Flat 402, Block B, Skyline Tower, New Delhi"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-ghost" id="btn-cancel-client">Cancel</button>
+                    <button type="submit" class="btn-gold" id="btn-submit-client">Save Client</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ================== MODAL: ADD CASE ================== -->
+    <div id="modal-case" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modal-case-title">Add Case Record</h3>
+                <button class="btn-close-modal" id="btn-close-case-modal">&times;</button>
+            </div>
+            <form id="modal-case-form">
+                <input type="hidden" id="modal-case-id">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="case-client-id">Client *</label>
+                        <select id="case-client-id" required>
+                            <!-- Dynamically loaded -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="case-number">Case Number / Reference *</label>
+                        <input type="text" id="case-number" required placeholder="e.g. Civil Suit 402/2026 or CN-8821">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label for="case-court">Court / Forum</label>
+                            <input type="text" id="case-court" placeholder="e.g. Delhi High Court">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="case-type">Case Category</label>
+                            <input type="text" id="case-type" placeholder="e.g. Property / Bail / Civil">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label for="case-status">Status</label>
+                            <select id="case-status">
+                                <option value="Pending">Pending</option>
+                                <option value="Ongoing">Ongoing</option>
+                                <option value="Closed">Closed</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="case-hearing">Next Hearing Date</label>
+                            <input type="datetime-local" id="case-hearing">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="case-notes">Brief Case Notes</label>
+                        <textarea id="case-notes" rows="3" placeholder="Additional details, opposing advocate, next steps..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-ghost" id="btn-cancel-case">Cancel</button>
+                    <button type="submit" class="btn-gold" id="btn-submit-case">Save Case</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================== MODAL: VIEW SAVED DRAFT ================== -->
+    <div id="modal-document" class="modal-overlay">
+        <div class="modal-card" style="max-width: 720px; width: 90%;">
+            <div class="modal-header">
+                <div>
+                    <h3 id="modal-doc-title">Legal Document Preview</h3>
+                    <p class="text-muted" id="modal-doc-subtitle" style="font-size: 12px; margin-top: 2px;"></p>
+                </div>
+                <button class="btn-close-modal" id="btn-close-doc-modal">&times;</button>
+            </div>
+            <div class="modal-body" style="padding-top: 10px;">
+                <div class="draft-paper" style="display: block; max-height: 420px; overflow-y: auto; background: #fff; padding: 18px; border: 1px solid var(--gray-200); border-radius: var(--radius-sm);">
+                    <pre id="modal-doc-content" style="white-space: pre-wrap; font-family: var(--font-mono); font-size: 13px; line-height: 1.6;"></pre>
+                </div>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: space-between;">
+                <div>
+                    <button type="button" class="btn-ghost" id="btn-modal-copy-doc">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        Copy
+                    </button>
+                    <button type="button" class="btn-ghost" id="btn-modal-download-doc">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Download (.txt)
+                    </button>
+                </div>
+                <button type="button" class="btn-gold" id="btn-close-doc-modal-action">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================== MODAL: HEARING REMINDERS RESULTS ================== -->
+    <div id="modal-reminders" class="modal-overlay">
+        <div class="modal-card" style="max-width: 600px; width: 90%;">
+            <div class="modal-header">
+                <div>
+                    <h3>Automated Hearing Reminders</h3>
+                    <p class="text-muted" style="font-size: 12px; margin-top: 2px;">Hearings scheduled within the next 48 hours</p>
+                </div>
+                <button class="btn-close-modal" id="btn-close-reminders-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="reminders-summary-banner" style="padding: 12px; border-radius: var(--radius-sm); margin-bottom: 15px; font-weight: 500;"></div>
+                <div id="reminders-list-container" class="scroll-y" style="max-height: 280px;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-gold" id="btn-close-reminders-action">Acknowledge</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button for quick case addition -->
+    <button class="fab-btn" id="fab-add-case" style="display: none;">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--gold-300)" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </button>
+
+    <script src="app.js"></script>
+</body>
+</html>
